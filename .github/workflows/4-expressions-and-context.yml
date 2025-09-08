@@ -87,16 +87,17 @@ jobs:
 
       # Step 3: String Manipulation Functions
       - name: String Manipulation Examples
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
           echo "=== String Transformations ==="
           echo "Original ref: ${{ github.ref }}"
           echo "Clean branch name: ${{ replace(github.ref, 'refs/heads/', '') }}"
-          echo "Uppercase branch: ${{ upper(github.ref_name) }}"
-          echo "Lowercase branch: ${{ lower(github.ref_name) }}"
+          echo "Uppercase branch: ${{ toUpperCase(github.ref_name) }}"
+          echo "Lowercase branch: ${{ toLowerCase(github.ref_name) }}"
           echo "Branch contains 'main': ${{ contains(github.ref_name, 'main') }}"
           echo "Branch starts with 'feature': ${{ startsWith(github.ref_name, 'feature/') }}"
-            
           echo "=== Conditional Logic ==="
-          echo "Environment type: ${{ github.ref_name == 'main' && 'production' || 'development' }}"
-          echo "Runner type: ${{ runner.os == 'Linux' && 'unix' || 'other' }}"
-          echo "Branch category: ${{ startsWith(github.ref_name, 'feature/') && 'feature' || 'stable' }}"
+          echo "Environment type: $( [ "$BRANCH_NAME" = "main" ] && echo 'production' || echo 'development' )"
+          echo "Runner type: $( [ "${{ runner.os }}" = "Linux" ] && echo 'unix' || echo 'other' )"
+          echo "Branch category: $( [ "${{ startsWith(github.ref_name, 'feature/') }}" = "true" ] && echo 'feature' || echo 'stable' )"
