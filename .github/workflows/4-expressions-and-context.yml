@@ -54,3 +54,49 @@ jobs:
           echo "Has DATABASE_URL secret: ${{ secrets.DATABASE_URL != '' }}"
           echo "API key configured: $( [ -n "$TEST_API_KEY" ] && echo 'YES' || echo 'NO' )"
           echo "Database URL starts with 'postgresql': ${{ startsWith(secrets.DATABASE_URL, 'postgresql') }}"
+
+  logic-operations:
+    needs: context-explorer
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Branch-based Conditional Steps
+      - name: Run on main Branch
+        if: github.ref_name == 'main'
+        run: echo "This step runs only on the main branch"
+
+      - name: Run on dev Branch
+        if: github.ref_name == 'dev'
+        run: echo "This step runs only on the dev branch"
+
+      - name: Run on release/* Branches
+        if: startsWith(github.ref_name, 'release/')
+        run: echo "This step runs on release/* branches"
+
+      # Step 2: OS Conditional Steps
+      - name: Run on Ubuntu
+        if: runner.os == 'Linux'
+        run: echo "This step runs on Ubuntu (Linux)"
+
+      - name: Run on Windows
+        if: runner.os == 'Windows'
+        run: echo "This step would run on Windows"
+
+      - name: Run on macOS
+        if: runner.os == 'macOS'
+        run: echo "This step would run on macOS"
+
+      # Step 3: String Manipulation Functions
+      - name: String Manipulation Examples
+        run: |
+          echo "=== String Transformations ==="
+          echo "Original ref: ${{ github.ref }}"
+          echo "Clean branch name: ${{ replace(github.ref, 'refs/heads/', '') }}"
+          echo "Uppercase branch: ${{ upper(github.ref_name) }}"
+          echo "Lowercase branch: ${{ lower(github.ref_name) }}"
+          echo "Branch contains 'main': ${{ contains(github.ref_name, 'main') }}"
+          echo "Branch starts with 'feature': ${{ startsWith(github.ref_name, 'feature/') }}"
+            
+          echo "=== Conditional Logic ==="
+          echo "Environment type: ${{ github.ref_name == 'main' && 'production' || 'development' }}"
+          echo "Runner type: ${{ runner.os == 'Linux' && 'unix' || 'other' }}"
+          echo "Branch category: ${{ startsWith(github.ref_name, 'feature/') && 'feature' || 'stable' }}"
