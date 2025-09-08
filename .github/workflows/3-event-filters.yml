@@ -12,5 +12,5 @@ jobs:
   test-filters:
     runs-on: ubuntu-latest
     steps:
-      - name: Display Trigger Information
+      - name: Display Trigger Information.
         run: echo "Event filters working! Triggered on ${{ github.ref_name }} branch"
