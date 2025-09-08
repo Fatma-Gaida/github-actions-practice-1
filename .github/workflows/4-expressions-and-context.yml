@@ -89,10 +89,11 @@ jobs:
       - name: String Manipulation Examples
         env:
           BRANCH_NAME: ${{ github.ref_name }}
+          REF: ${{ github.ref }}
         run: |
           echo "=== String Transformations ==="
-          echo "Original ref: ${{ github.ref }}"
-          echo "Clean branch name: ${{ replace(github.ref, 'refs/heads/', '') }}"
+          echo "Original ref: $REF"
+          echo "Clean branch name: ${REF#refs/heads/}"
           echo "Uppercase branch: ${{ toUpperCase(github.ref_name) }}"
           echo "Lowercase branch: ${{ toLowerCase(github.ref_name) }}"
           echo "Branch contains 'main': ${{ contains(github.ref_name, 'main') }}"
