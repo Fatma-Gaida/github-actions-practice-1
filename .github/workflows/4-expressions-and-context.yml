@@ -45,9 +45,12 @@ jobs:
 
       # Step 4: Secrets Context Test
       - name: Test Secrets Context
+        env:
+          TEST_API_KEY: ${{ secrets.TEST_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           echo "=== Secrets Availability Check ==="
           echo "Has TEST_API_KEY secret: ${{ secrets.TEST_API_KEY != '' }}"
           echo "Has DATABASE_URL secret: ${{ secrets.DATABASE_URL != '' }}"
-          echo "API key configured: ${{ secrets.TEST_API_KEY != '' && 'YES' || 'NO' }}"
+          echo "API key configured: $( [ -n "$TEST_API_KEY" ] && echo 'YES' || echo 'NO' )"
           echo "Database URL starts with 'postgresql': ${{ startsWith(secrets.DATABASE_URL, 'postgresql') }}"
